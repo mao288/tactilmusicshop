@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Táctil — Tienda de música profesional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sala:#0A0D18; --panel:#131829; --panel2:#171D33; --linea:#232B47;
+  --texto:#F4F6FB; --mudo:#7F8AA6;
+  --mag:#E0308F; --cyan:#00C2E8;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--sala); color:var(--texto);
+  font-family:"IBM Plex Sans",-apple-system,Segoe UI,sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.arch{font-family:Archivo,Impact,sans-serif;font-weight:800;letter-spacing:-.02em;line-height:1.05}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+
+/* ---- barra ---- */
+header{position:sticky;top:0;z-index:50;background:rgba(10,13,24,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--linea)}
+.bar{display:flex;align-items:center;gap:28px;height:74px}
+.logo{display:flex;align-items:center;gap:11px;flex-shrink:0}
+.logo svg{width:66px;height:26px;display:block}
+.logo b{font-family:Archivo;font-weight:800;font-size:23px;letter-spacing:.01em}
+nav{display:flex;gap:24px;margin-left:auto;font-size:14.5px;font-weight:500;color:#C3CBDD}
+nav a:hover{color:var(--cyan)}
+.wa{display:inline-flex;align-items:center;gap:8px;background:var(--cyan);color:#06202B;
+  font-weight:600;font-size:14px;padding:10px 17px;border-radius:7px;flex-shrink:0}
+.wa:hover{background:#3ad4f5}
+
+/* ---- hero ---- */
+.hero{padding:74px 0 54px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;left:50%;top:-160px;width:900px;height:420px;
+  transform:translateX(-50%);border-radius:50%;
+  background:radial-gradient(ellipse,rgba(224,48,143,.16),rgba(0,194,232,.10) 45%,transparent 70%);
+  pointer-events:none}
+.hero .inner{position:relative;max-width:880px}
+.hero h1{font-size:clamp(38px,5.6vw,64px)}
+.hero p{margin-top:18px;font-size:18px;color:#B9C2D6;max-width:56ch}
+
+.buscador{margin-top:34px;position:relative}
+.buscador input{
+  width:100%;background:var(--panel);border:1px solid var(--linea);color:var(--texto);
+  font-family:inherit;font-size:17px;padding:19px 20px 19px 54px;border-radius:11px}
+.buscador input::placeholder{color:#66718C}
+.buscador input:focus{border-color:var(--cyan);outline:none}
+.buscador .ic{position:absolute;left:20px;top:50%;transform:translateY(-50%);color:#66718C}
+.sug{display:flex;flex-wrap:wrap;gap:9px;margin-top:14px;align-items:center}
+.sug span{font-size:13px;color:var(--mudo)}
+.sug button{background:transparent;border:1px solid var(--linea);color:#C3CBDD;
+  font-family:inherit;font-size:13px;padding:6px 13px;border-radius:20px;cursor:pointer}
+.sug button:hover{border-color:var(--cyan);color:var(--cyan)}
+
+/* ---- lineas ---- */
+.lineas{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:34px 0 10px}
+.linea{background:var(--panel);border:1px solid var(--linea);border-radius:13px;padding:26px 24px;cursor:pointer;text-align:left;font-family:inherit;color:inherit}
+.linea:hover{border-color:#39456E}
+.linea .n{display:block;font-family:Archivo;font-weight:800;font-size:21px}
+.linea .d{display:block;font-size:14px;color:var(--mudo);margin-top:8px;line-height:1.55}
+.linea .k{width:38px;height:4px;border-radius:3px;margin-bottom:18px;display:block}
+
+/* ---- catalogo ---- */
+section{padding:64px 0}
+.enc{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:26px}
+.enc h2{font-size:31px}
+.enc .sub{font-size:14.5px;color:var(--mudo);margin-top:6px}
+.filtros{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:24px}
+.filtros select{background:var(--panel);border:1px solid var(--linea);color:var(--texto);
+  font-family:inherit;font-size:14px;padding:10px 14px;border-radius:8px}
+.pill{background:transparent;border:1px solid var(--linea);color:#C3CBDD;font-family:inherit;
+  font-size:14px;padding:9px 16px;border-radius:8px;cursor:pointer}
+.pill[aria-pressed="true"]{background:var(--texto);color:#0A0D18;border-color:var(--texto);font-weight:600}
+.cuenta{margin-left:auto;font-size:14px;color:var(--mudo)}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:16px}
+.card{background:var(--panel);border:1px solid var(--linea);border-radius:13px;overflow:hidden;display:flex;flex-direction:column}
+.card .foto{height:150px;background:var(--panel2);display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--linea)}
+.card .foto svg{width:52px;height:52px;opacity:.5}
+.card .cuerpo{padding:17px 17px 18px;display:flex;flex-direction:column;flex:1}
+.card .marca{font-size:11.5px;letter-spacing:.09em;color:var(--cyan);font-weight:600}
+.card h3{font-family:"IBM Plex Sans";font-weight:600;font-size:15px;line-height:1.4;margin-top:7px;letter-spacing:0}
+.card .precio{font-family:Archivo;font-weight:700;font-size:21px;margin-top:13px}
+.card .stock{font-size:12.5px;color:var(--mudo);margin-top:3px}
+.card .cot{margin-top:14px;display:block;text-align:center;background:transparent;border:1px solid var(--cyan);
+  color:var(--cyan);font-family:inherit;font-weight:600;font-size:13.5px;padding:10px;border-radius:8px;cursor:pointer}
+.card .cot:hover{background:var(--cyan);color:#06202B}
+.vacio{grid-column:1/-1;padding:56px 20px;text-align:center;color:var(--mudo);
+  border:1px dashed var(--linea);border-radius:13px}
+
+/* ---- servicio ---- */
+.serv{background:var(--panel);border:1px solid var(--linea);border-radius:16px;padding:44px 40px;
+  display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center}
+.serv h2{font-size:31px}
+.serv p{color:#B9C2D6;margin-top:14px;max-width:48ch}
+.serv ul{list-style:none;margin-top:22px;display:grid;gap:11px}
+.serv li{font-size:14.5px;color:#C3CBDD;padding-left:22px;position:relative}
+.serv li::before{content:"";position:absolute;left:0;top:9px;width:9px;height:2px;border-radius:2px;background:var(--cyan)}
+
+/* ---- marcas ---- */
+.marcas{display:flex;flex-wrap:wrap;gap:10px}
+.marcas div{border:1px solid var(--linea);border-radius:8px;padding:13px 22px;font-family:Archivo;
+  font-weight:700;font-size:15px;color:#9AA5BE;letter-spacing:.02em}
+
+/* ---- sucursal ---- */
+.suc{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+.dato{border-top:1px solid var(--linea);padding-top:15px;margin-top:18px}
+.dato .l{font-size:12px;letter-spacing:.08em;color:var(--mudo)}
+.dato .v{font-size:16px;margin-top:5px}
+.mapa{background:var(--panel);border:1px solid var(--linea);border-radius:13px;min-height:270px;
+  display:flex;align-items:center;justify-content:center;color:var(--mudo);font-size:14px}
+
+footer{border-top:1px solid var(--linea);padding:32px 0;color:var(--mudo);font-size:13.5px;
+  display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+
+@media(max-width:860px){
+  nav{display:none}
+  .lineas,.suc{grid-template-columns:1fr}
+  .serv{grid-template-columns:1fr;padding:32px 26px}
+  section{padding:48px 0}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <div class="logo">
+      <svg viewBox="0 0 200 80" aria-hidden="true">
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#E0308F"/><stop offset=".55" stop-color="#7B58C4"/><stop offset="1" stop-color="#00C2E8"/>
+        </linearGradient></defs>
+        <circle cx="12" cy="40" r="9" fill="none" stroke="#E0308F" stroke-width="6"/>
+        <path d="M18 40 H34 L44 14 L54 66 L64 5 L76 71 L86 24 L96 52 L104 40 H126"
+              fill="none" stroke="url(#g1)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="126" y="33" width="11" height="14" rx="2" fill="#00C2E8"/>
+        <rect x="139" y="29" width="36" height="22" rx="4" fill="#00C2E8"/>
+        <rect x="175" y="35" width="16" height="10" rx="5" fill="#00C2E8"/>
+      </svg>
+      <b>TÁCTIL</b>
+    </div>
+    <nav>
+      <a href="#catalogo">Catálogo</a>
+      <a href="#servicio">Servicio técnico</a>
+      <a href="#marcas">Marcas</a>
+      <a href="#sucursal">Sucursal</a>
+    </nav>
+    <a class="wa" href="https://wa.me/5215560873613" target="_blank" rel="noopener">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15l-1.3 4.8 4.9-1.3A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8 8 0 1112 20zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.7.9-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4c0-.1-.5-1.3-.7-1.7-.2-.5-.4-.4-.5-.4h-.5c-.1 0-.4.1-.6.3-.2.2-.8.8-.8 2s.8 2.3.9 2.4c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.2 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.6.2-1 .1-1.1z"/></svg>
+      WhatsApp
+    </a>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="wrap inner">
+    <h1>Instrumentos, audio<br>e iluminación en Toluca</h1>
+    <p>Más de dos mil productos en existencia y bajo pedido. Busca lo que necesitas y cotízalo por WhatsApp en un mensaje.</p>
+
+    <div class="buscador">
+      <svg class="ic" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="q" type="search" placeholder="Busca por producto o marca: QSC, Shure, guitarra, cabeza móvil…" aria-label="Buscar en el catálogo">
+    </div>
+    <div class="sug">
+      <span>Búsquedas frecuentes</span>
+      <button data-q="QSC">QSC</button>
+      <button data-q="Shure">Shure</button>
+      <button data-q="bocina">Bocinas</button>
+      <button data-q="guitarra">Guitarras</button>
+      <button data-q="cabeza móvil">Cabezas móviles</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="lineas">
+    <button class="linea" data-cat="audio">
+      <span class="k" style="background:#00C2E8"></span>
+      <span class="n">Audio profesional</span>
+      <span class="d">Bocinas, consolas, micrófonos y cableado. Distribuidor autorizado QSC.</span>
+    </button>
+    <button class="linea" data-cat="instrumentos">
+      <span class="k" style="background:#E0308F"></span>
+      <span class="n">Instrumentos</span>
+      <span class="d">Cuerda, viento, percusión y teclados de las marcas que ya conoces.</span>
+    </button>
+    <button class="linea" data-cat="iluminacion">
+      <span class="k" style="background:#7B58C4"></span>
+      <span class="n">Iluminación</span>
+      <span class="d">Cabezas móviles, pares LED, controladores DMX y estructura.</span>
+    </button>
+  </div>
+</div>
+
+<section id="catalogo">
+  <div class="wrap">
+    <div class="enc">
+      <div>
+        <h2>Catálogo</h2>
+        <div class="sub">Precios actualizados por el equipo de Táctil.</div>
+      </div>
+    </div>
+
+    <div class="filtros">
+      <button class="pill" data-cat="todo" aria-pressed="true">Todo</button>
+      <button class="pill" data-cat="audio" aria-pressed="false">Audio profesional</button>
+      <button class="pill" data-cat="instrumentos" aria-pressed="false">Instrumentos</button>
+      <button class="pill" data-cat="iluminacion" aria-pressed="false">Iluminación</button>
+      <select id="marca" aria-label="Filtrar por marca"><option value="todo">Todas las marcas</option></select>
+      <div class="cuenta" id="cuenta"></div>
+    </div>
+
+    <div class="grid" id="grid"></div>
+  </div>
+</section>
+
+<section id="servicio">
+  <div class="wrap">
+    <div class="serv">
+      <div>
+        <h2>Servicio técnico propio</h2>
+        <p>Reparamos lo que vendemos y lo que no. Diagnóstico sin costo y presupuesto antes de cualquier trabajo.</p>
+        <ul>
+          <li>Bocinas activas y pasivas, amplificadores y consolas</li>
+          <li>Luces robóticas, pares LED y controladores DMX</li>
+          <li>Instrumentos de cuerda, viento y percusión</li>
+          <li>Armado de cableado a medida</li>
+        </ul>
+      </div>
+      <div>
+        <a class="wa" style="width:100%;justify-content:center;padding:15px"
+           href="https://wa.me/5215560873613?text=Hola%2C%20quiero%20solicitar%20un%20diagn%C3%B3stico%20para%20un%20equipo."
+           target="_blank" rel="noopener">Solicitar diagnóstico</a>
+        <div class="dato"><div class="l">TIEMPO DE RESPUESTA</div><div class="v">Diagnóstico en 24 a 48 horas</div></div>
+        <div class="dato"><div class="l">GARANTÍA</div><div class="v">90 días sobre la reparación</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="marcas">
+  <div class="wrap">
+    <div class="enc"><div><h2>Marcas que manejamos</h2><div class="sub">Distribuidor autorizado de las líneas marcadas por el fabricante.</div></div></div>
+    <div class="marcas">
+      <div>QSC</div><div>SHURE</div><div>YAMAHA</div><div>FENDER</div><div>IBANEZ</div><div>TAMA</div>
+      <div>PEARL</div><div>ROLAND</div><div>BEHRINGER</div><div>SENNHEISER</div><div>CHAUVET</div><div>ADJ</div>
+      <div>SABIAN</div><div>CORT</div><div>HERCULES</div>
+    </div>
+  </div>
+</section>
+
+<section id="sucursal">
+  <div class="wrap">
+    <div class="suc">
+      <div>
+        <h2 style="font-size:31px">Sucursal física</h2>
+        <p style="color:#B9C2D6;margin-top:14px">Pasa a probar el equipo antes de comprarlo. Tenemos piso de demostración.</p>
+        <div class="dato"><div class="l">DIRECCIÓN</div><div class="v">Blvd. José María Pino Suárez 113A<br>Col. 5 de Mayo, 50090 Toluca, Edo. Méx.</div></div>
+        <div class="dato"><div class="l">HORARIO</div><div class="v">Lunes a viernes de 11:00 a 19:00<br>Sábado de 11:00 a 16:00</div></div>
+        <div class="dato"><div class="l">CONTACTO</div><div class="v">WhatsApp 55 6087 3613</div></div>
+      </div>
+      <div class="mapa">Mapa de Google en la versión final</div>
+    </div>
+  </div>
+</section>
+
+<footer class="wrap">
+  <div>Táctil — Tienda de música profesional</div>
+  <div>Instagram · Facebook · TikTok</div>
+</footer>
+
+<script>
+const TEL = "5215560873613";
+const P = [
+ ["QSC","Bocina activa K12.2 de 12 pulgadas, 2000 W",38900,"audio",1],
+ ["QSC","Bocina activa K10.2 de 10 pulgadas, 2000 W",33500,"audio",1],
+ ["QSC","Subwoofer activo KS118 de 18 pulgadas",62400,"audio",0],
+ ["QSC","Bocina compacta CP8 de 8 pulgadas",19800,"audio",1],
+ ["QSC","Amplificador GX3 de 300 W por canal",14900,"audio",0],
+ ["Shure","Micrófono dinámico vocal SM58",2690,"audio",1],
+ ["Shure","Micrófono dinámico para instrumento SM57",2590,"audio",1],
+ ["Shure","Sistema inalámbrico BLX24 con cápsula PG58",7450,"audio",1],
+ ["Behringer","Consola digital X32 Compact de 32 canales",42900,"audio",0],
+ ["Yamaha","Mezcladora análoga MG12XU de 12 canales",9850,"audio",1],
+ ["Sennheiser","Micrófono vocal e835",1890,"audio",1],
+ ["Hercules","Tripié SS400B para bocina",1690,"audio",1],
+ ["Fender","Guitarra eléctrica Player Stratocaster HSS",24500,"instrumentos",1],
+ ["Ibanez","Guitarra eléctrica GRG121DX",7290,"instrumentos",1],
+ ["Ibanez","Bajo eléctrico GSR200 de 4 cuerdas",8190,"instrumentos",1],
+ ["Yamaha","Guitarra acústica F310",4190,"instrumentos",1],
+ ["Cort","Guitarra acústica AD810",3690,"instrumentos",1],
+ ["Tama","Batería Imperialstar de 5 piezas",21900,"instrumentos",0],
+ ["Pearl","Batería Export EXX de 5 piezas",24300,"instrumentos",1],
+ ["Roland","Piano digital FP-30X de 88 teclas",19900,"instrumentos",1],
+ ["Yamaha","Teclado PSR-E383 de 61 teclas",6490,"instrumentos",1],
+ ["Sabian","Set de platillos SBR de 4 piezas",5890,"instrumentos",1],
+ ["Chauvet","Cabeza móvil Intimidator Spot 260X",18700,"iluminacion",1],
+ ["ADJ","Cabeza móvil Focus Spot 4Z",26400,"iluminacion",0],
+ ["Chauvet","Par LED SlimPAR Pro H USB",6850,"iluminacion",1],
+ ["ADJ","Par LED Mega Hex Par",3990,"iluminacion",1],
+ ["Chauvet","Controlador DMX Obey 40",3450,"iluminacion",1],
+ ["ADJ","Estructura truss cuadrado de 2 metros",4200,"iluminacion",1]
+].map((x,i)=>({id:i,marca:x[0],nombre:x[1],precio:x[2],cat:x[3],stock:x[4]}));
+
+const IC = {
+ audio:'<svg viewBox="0 0 24 24" fill="none" stroke="#00C2E8" stroke-width="1.5"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="9" r="3.2"/><circle cx="12" cy="17" r="1.6"/></svg>',
+ instrumentos:'<svg viewBox="0 0 24 24" fill="none" stroke="#E0308F" stroke-width="1.5"><circle cx="8" cy="18" r="3.4"/><path d="M11.4 17V4l8 2.4v10"/><circle cx="16.6" cy="16.4" r="3"/></svg>',
+ iluminacion:'<svg viewBox="0 0 24 24" fill="none" stroke="#9B7BE0" stroke-width="1.5"><path d="M12 3v3M5 6l2 2M19 6l-2 2"/><path d="M8 11h8l2 9H6z"/></svg>'
+};
+const mxn = n => "$" + n.toLocaleString("es-MX");
+
+const grid=document.getElementById("grid"), cuenta=document.getElementById("cuenta"),
+      q=document.getElementById("q"), selMarca=document.getElementById("marca");
+let cat="todo";
+
+[...new Set(P.map(p=>p.marca))].sort().forEach(m=>{
+  const o=document.createElement("option"); o.value=m; o.textContent=m; selMarca.appendChild(o);
+});
+
+function pinta(){
+  const t=q.value.trim().toLowerCase(), m=selMarca.value;
+  const r=P.filter(p=>
+    (cat==="todo"||p.cat===cat) && (m==="todo"||p.marca===m) &&
+    (!t || (p.nombre+" "+p.marca+" "+p.cat).toLowerCase().includes(t)));
+  cuenta.textContent = r.length===1 ? "1 producto" : r.length+" productos";
+  if(!r.length){
+    grid.innerHTML='<div class="vacio">No encontramos nada con esa búsqueda.<br>Escríbenos por WhatsApp y lo cotizamos bajo pedido.</div>';
+    return;
+  }
+  grid.innerHTML = r.map(p=>{
+    const msg=encodeURIComponent("Hola, me interesa: "+p.marca+" "+p.nombre+" — "+mxn(p.precio)+". ¿Sigue disponible?");
+    return `<article class="card">
+      <div class="foto">${IC[p.cat]}</div>
+      <div class="cuerpo">
+        <div class="marca">${p.marca}</div>
+        <h3>${p.nombre}</h3>
+        <div class="precio">${mxn(p.precio)}</div>
+        <div class="stock">${p.stock?"En existencia":"Bajo pedido"}</div>
+        <a class="cot" href="https://wa.me/${TEL}?text=${msg}" target="_blank" rel="noopener">Cotizar por WhatsApp</a>
+      </div>
+    </article>`;
+  }).join("");
+}
+
+function setCat(c){
+  cat=c;
+  document.querySelectorAll(".pill").forEach(b=>b.setAttribute("aria-pressed", b.dataset.cat===c));
+  pinta();
+}
+document.querySelectorAll(".pill").forEach(b=>b.onclick=()=>setCat(b.dataset.cat));
+document.querySelectorAll(".linea").forEach(b=>b.onclick=()=>{
+  setCat(b.dataset.cat);
+  document.getElementById("catalogo").scrollIntoView({behavior:"smooth"});
+});
+document.querySelectorAll(".sug button").forEach(b=>b.onclick=()=>{
+  q.value=b.dataset.q; setCat("todo");
+  document.getElementById("catalogo").scrollIntoView({behavior:"smooth"});
+});
+q.oninput=pinta; selMarca.onchange=pinta;
+pinta();
+</script>
+</body>
+</html>
